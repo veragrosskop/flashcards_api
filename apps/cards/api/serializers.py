@@ -5,6 +5,7 @@ from common.enums.language import LanguageChoice
 class CardSerializer(serializers.ModelSerializer):
     native_language = serializers.ChoiceField(choices=LanguageChoice.choices)
     foreign_language = serializers.ChoiceField(choices=LanguageChoice.choices)
+
     class Meta:
         model = Card
         fields = "__all__"
@@ -13,11 +14,23 @@ class CardSerializer(serializers.ModelSerializer):
     def validate(self, data):
         native = data.get("native")
         foreign = data.get("foreign")
+        native_language = data.get("native_language")
+        foreign_language = data.get("foreign_language")
+        box_ntf = data.get("box_ntf")
+        box_ftn = data.get("box_ftn")
+
+        if self.instance is not None:
+            native = native if native is not None else self.instance.native
+            foreign = foreign if foreign is not None else self.instance.foreign
+            native_language = native_language if native_language is not None else self.instance.native_language
+            foreign_language = foreign_language if foreign_language is not None else self.instance.foreign_language
+            box_ntf = box_ntf if box_ntf is not None else self.instance.box_ntf
+            box_ftn = box_ftn if box_ftn is not None else self.instance.box_ftn
 
         if not native or not foreign:
             raise serializers.ValidationError("Both native and foreign are required.")
 
-        if native == foreign:
-            raise serializers.ValidationError("Native and foreign cannot be the same.")
+        if native_language == foreign_language:
+            raise serializers.ValidationError("Native and foreign language cannot be the same.")
 
         return data

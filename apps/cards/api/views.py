@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from apps.cards.models import Card
 from .serializers import CardSerializer
-from cards.services.card_services import create_card, update_card
+from apps.cards.services.card_services import create_card, update_card
 
 
 class CardViewSet(viewsets.ModelViewSet):
