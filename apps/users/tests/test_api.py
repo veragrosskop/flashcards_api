@@ -161,6 +161,7 @@ def test_refresh_token(api_client, user):
     assert response.status_code == status.HTTP_200_OK
     assert "access" in response.data
 
+
 def test_register_user_hashes_password(api_client):
     payload = {
         "username": "newuser",

@@ -2,7 +2,14 @@ import pytest
 from rest_framework import status
 
 from apps.cards.models import Card, LanguageChoice
-from apps.cards.tests.conftest import card, user, another_user, api_client, authenticated_client
+from apps.cards.tests.conftest import (
+    card,
+    user,
+    another_user,
+    api_client,
+    authenticated_client,
+)
+
 
 @pytest.mark.django_db
 def test_create_card(authenticated_client, user):
@@ -24,6 +31,7 @@ def test_create_card(authenticated_client, user):
     assert card.foreign == "Gatto"
     assert card.native_language == LanguageChoice.ENGLISH
     assert card.foreign_language == LanguageChoice.ITALIAN
+
 
 def test_get_cards_list_only_returns_authenticated_users_cards(
     authenticated_client,
@@ -63,6 +71,7 @@ def test_get_card_detail_returns_404_for_another_users_card(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
+
 @pytest.mark.django_db
 def test_create_card_fails_when_not_authenticated(api_client):
     payload = {
@@ -88,7 +97,9 @@ def test_update_card(authenticated_client, card):
         "box_ftn": 2,
     }
 
-    response = authenticated_client.put(f"/api/cards/{card.id}/", payload, format="json")
+    response = authenticated_client.put(
+        f"/api/cards/{card.id}/", payload, format="json"
+    )
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -106,7 +117,9 @@ def test_partial_update_card(authenticated_client, card):
         "native": "Door",
     }
 
-    response = authenticated_client.patch(f"/api/cards/{card.id}/", payload, format="json")
+    response = authenticated_client.patch(
+        f"/api/cards/{card.id}/", payload, format="json"
+    )
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -123,7 +136,9 @@ def test_delete_card(authenticated_client, card):
 
 
 @pytest.mark.django_db
-def test_create_card_fails_when_native_and_foreign_language_are_same(authenticated_client):
+def test_create_card_fails_when_native_and_foreign_language_are_same(
+    authenticated_client,
+):
     payload = {
         "native": "House",
         "foreign": "Huis",

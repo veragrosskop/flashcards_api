@@ -51,7 +51,6 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -131,10 +130,8 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
-
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
-
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
