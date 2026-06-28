@@ -1,11 +1,15 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from common.enums.language import LanguageChoice
+
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
+    native_languages = serializers.ListField(child=serializers.ChoiceField(choices=LanguageChoice.choices), required=False)
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name"]
+        fields = ["id", "username", "email", "first_name", "last_name", "native_languages"]
         read_only_fields = ["id"]
 
     def validate_email(self, value):
@@ -22,10 +26,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-
+    native_languages = serializers.ListField(
+        child=serializers.ChoiceField(choices=LanguageChoice.choices),
+        required=False,
+    )
     class Meta:
         model = User
-        fields = ["id", "username", "email", "password"]
+        fields = ["id", "username", "email", "password", "native_languages"]
         read_only_fields = ["id"]
 
     def validate_email(self, value):
