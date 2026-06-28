@@ -22,8 +22,8 @@ jobs:
         image: postgres:16-alpine
         env:
           POSTGRES_DB: flashcards_test
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
 
@@ -59,7 +59,7 @@ jobs:
 
       - name: Run Black (check only)
         run: |
-          black . --check --diff --exclude migrations
+          black . --check --diff --exclude "/migrations/"
 
       - name: Run migrations
         run: |
