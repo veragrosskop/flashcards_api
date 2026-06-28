@@ -2,8 +2,9 @@ from apps.cards.models import DirectionChoice, CardReviewEvent, BOX_MIN
 from apps.cards.models import BOX_MIN, BOXES
 from django.db import transaction
 
+
 @transaction.atomic
-def submit_card_guess(card, direction:DirectionChoice, correct: bool) -> None:
+def submit_card_guess(card, direction: DirectionChoice, correct: bool) -> None:
     """
     Moves a card to a study box depending on whether it was solved.
     Solved? -> yes -> move a box over
@@ -33,10 +34,12 @@ def submit_card_guess(card, direction:DirectionChoice, correct: bool) -> None:
 
     card.save()
 
-    #event Log
+    # event Log
     CardReviewEvent.objects.create(
         card=card,
         direction=direction,
-        result=CardReviewEvent.Result.CORRECT if correct else CardReviewEvent.Result.WRONG,
-        new_box=new_box
+        result=(
+            CardReviewEvent.Result.CORRECT if correct else CardReviewEvent.Result.WRONG
+        ),
+        new_box=new_box,
     )

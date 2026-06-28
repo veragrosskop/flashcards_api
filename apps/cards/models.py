@@ -11,7 +11,6 @@ BOX_MIN = 1
 BOXES = range(BOX_MIN, BOX_MAX + 1)
 
 
-
 class HierarchyType(models.TextChoices):
     """Similar to an Enumerator this defines the type of Hierarchy of a Source."""
 
@@ -54,7 +53,8 @@ class Deck(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="decks",)
+        related_name="decks",
+    )
 
     # shared_with = models.ManyToManyField(CustomUser, related_name='shared_decks', blank=True)
 
@@ -84,9 +84,10 @@ class Card(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="cards",)
+        related_name="cards",
+    )
 
-    #card content
+    # card content
     native = models.CharField(max_length=100)
     foreign = models.CharField(max_length=100)
 
@@ -107,21 +108,14 @@ class Card(models.Model):
     def __str__(self):
         return f"{self.native} -> {self.foreign}"
 
-
     def get_text(self, direction: DirectionChoice) -> Dict[str, str]:
         """
         Dynamically return the card text in the correct direction (native, foreign) or (foreign, native)
         """
         if direction == DirectionChoice.NATIVE_TO_FOREIGN:
-            return {
-                "front": self.native,
-                "back": self.foreign
-            }
+            return {"front": self.native, "back": self.foreign}
         elif direction == DirectionChoice.FOREIGN_TO_NATIVE:
-            return {
-                "front": self.foreign,
-                "back": self.native
-            }
+            return {"front": self.foreign, "back": self.native}
         else:
             raise ValueError(f"Could not find direction: {direction}.")
 
@@ -129,11 +123,10 @@ class Card(models.Model):
     def supports_language_pair(
         self, lang1: LanguageChoice, lang2: LanguageChoice
     ) -> bool:
-        return (
-                self.native_language == lang1 and self.foreign_language == lang2
-        ) or (
-                self.native_language == lang2 and self.foreign_language == lang1
+        return (self.native_language == lang1 and self.foreign_language == lang2) or (
+            self.native_language == lang2 and self.foreign_language == lang1
         )
+
 
 class CardReviewEvent(models.Model):
     class Result(models.TextChoices):
@@ -159,7 +152,6 @@ class CardReviewEvent(models.Model):
     new_box = models.IntegerField(choices=zip(BOXES, BOXES))
 
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         indexes = [

@@ -10,6 +10,7 @@ def create_card(*, owner, native, foreign, native_language, foreign_language):
         foreign_language=foreign_language,
     )
 
+
 def update_card(card: Card, **fields):
     for attr, value in fields.items():
         setattr(card, attr, value)

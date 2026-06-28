@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.cards.models import Card
 from common.enums.language import LanguageChoice
 
+
 class CardSerializer(serializers.ModelSerializer):
     native_language = serializers.ChoiceField(choices=LanguageChoice.choices)
     foreign_language = serializers.ChoiceField(choices=LanguageChoice.choices)
@@ -22,8 +23,16 @@ class CardSerializer(serializers.ModelSerializer):
         if self.instance is not None:
             native = native if native is not None else self.instance.native
             foreign = foreign if foreign is not None else self.instance.foreign
-            native_language = native_language if native_language is not None else self.instance.native_language
-            foreign_language = foreign_language if foreign_language is not None else self.instance.foreign_language
+            native_language = (
+                native_language
+                if native_language is not None
+                else self.instance.native_language
+            )
+            foreign_language = (
+                foreign_language
+                if foreign_language is not None
+                else self.instance.foreign_language
+            )
             box_ntf = box_ntf if box_ntf is not None else self.instance.box_ntf
             box_ftn = box_ftn if box_ftn is not None else self.instance.box_ftn
 
@@ -31,6 +40,8 @@ class CardSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Both native and foreign are required.")
 
         if native_language == foreign_language:
-            raise serializers.ValidationError("Native and foreign language cannot be the same.")
+            raise serializers.ValidationError(
+                "Native and foreign language cannot be the same."
+            )
 
         return data
