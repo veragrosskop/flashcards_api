@@ -9,7 +9,7 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = "__all__"
-        read_only_fields = ["id", "date_created"]
+        read_only_fields = ["id", "owner", "date_created"]
 
     def validate(self, data):
         native = data.get("native")
