@@ -1,6 +1,7 @@
 from typing import Dict
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 from common.enums.language import LanguageChoice
@@ -50,7 +51,11 @@ class Deck(models.Model):
         related_name="decks",
     )
     cards = models.ManyToManyField("Card", related_name="decks", blank=True)
-    # owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="decks",)
+
     # shared_with = models.ManyToManyField(CustomUser, related_name='shared_decks', blank=True)
 
     def __str__(self):
@@ -59,7 +64,7 @@ class Deck(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["name", "parent"], name="unique_deck_per_parent"
+                fields=["owner", "name", "parent"], name="unique_deck_per_owner_parent"
             )
         ]
 
@@ -75,7 +80,11 @@ class DirectionChoice(models.TextChoices):
 
 
 class Card(models.Model):
-    # One Flashcard model storing front/back text card gets flipped in views/templates based on direction.
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="cards",)
 
     #card content
     native = models.CharField(max_length=100)
