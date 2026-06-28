@@ -175,3 +175,27 @@ def test_register_user_hashes_password(api_client):
     user = User.objects.get(username="newuser")
     assert user.password != "secure-password-123"
     assert user.check_password("secure-password-123")
+
+def test_register_user_fails_when_username_already_exists(api_client, user):
+    payload = {
+        "username": user.username,
+        "email": "different@example.com",
+        "password": "secure-password-123",
+    }
+
+    response = api_client.post("/api/users/register/", payload, format="json")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert User.objects.count() == 1
+
+def test_register_user_fails_when_email_already_exists(api_client, user):
+    payload = {
+        "username": "differentuser",
+        "email": user.email,
+        "password": "secure-password-123",
+    }
+
+    response = api_client.post("/api/users/register/", payload, format="json")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert User.objects.count() == 1
