@@ -7,6 +7,7 @@ from apps.cards.models import Card, LanguageChoice
 
 User = get_user_model()
 
+
 @pytest.fixture
 def user(db):
     return User.objects.create_user(
@@ -35,6 +36,7 @@ def authenticated_client(api_client, user):
     refresh = RefreshToken.for_user(user)
     api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
     return api_client
+
 
 @pytest.fixture
 def card(db, user):

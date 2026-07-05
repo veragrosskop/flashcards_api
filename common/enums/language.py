@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class LanguageChoice(models.TextChoices):
     AFRIKAANS = "AF", "Afrikaans"
     ALBANIAN = "SQ", "Albanian"
