@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements/ ./requirements/
 
 RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements/base.txt
 RUN pip install --no-cache-dir -r requirements/prod.txt
 
 COPY . .
