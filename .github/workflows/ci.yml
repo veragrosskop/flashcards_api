@@ -100,5 +100,5 @@ jobs:
           context: .
           push: true
           tags: |
-            yourdockerhubusername/flashcards-api:latest
-            yourdockerhubusername/flashcards-api:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/flashcards-api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/flashcards-api:${{ github.sha }}
