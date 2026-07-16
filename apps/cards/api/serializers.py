@@ -4,13 +4,33 @@ from common.enums.language import LanguageChoice
 
 
 class CardSerializer(serializers.ModelSerializer):
-    native_language = serializers.ChoiceField(choices=LanguageChoice.choices)
-    foreign_language = serializers.ChoiceField(choices=LanguageChoice.choices)
+    native_language = serializers.ChoiceField(
+        choices=LanguageChoice.choices,
+        help_text="Language code of the `native` field (e.g. EN).",
+    )
+    foreign_language = serializers.ChoiceField(
+        choices=LanguageChoice.choices,
+        help_text="Language code of the `foreign` field (e.g. NL). Must differ from native_language.",
+    )
 
     class Meta:
         model = Card
         fields = "__all__"
         read_only_fields = ["id", "owner", "date_created"]
+        extra_kwargs = {
+            "native": {
+                "help_text": "The word or phrase in the user's native language."
+            },
+            "foreign": {
+                "help_text": "The word or phrase in the foreign language being learned."
+            },
+            "box_ntf": {
+                "help_text": "Spaced-repetition box (1-5) for native-to-foreign review. Defaults to 1."
+            },
+            "box_ftn": {
+                "help_text": "Spaced-repetition box (1-5) for foreign-to-native review. Defaults to 1."
+            },
+        }
 
     def validate(self, data):
         native = data.get("native")

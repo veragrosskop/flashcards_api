@@ -10,7 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8,
+        help_text="Minimum 8 characters. Never returned in responses.",
+    )
 
     class Meta:
         model = User
