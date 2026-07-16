@@ -3,10 +3,16 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import (
+    TokenBlacklistView as SimpleJWTTokenBlacklistView,
+    TokenObtainPairView as SimpleJWTTokenObtainPairView,
+    TokenRefreshView as SimpleJWTTokenRefreshView,
+)
 
 from apps.users.api.serializers import RegisterSerializer, UserSerializer
 
 
+@extend_schema(tags=["Users"])
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
@@ -19,6 +25,7 @@ class RegisterView(generics.CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+@extend_schema(tags=["Users"])
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -43,3 +50,18 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+@extend_schema(tags=["Users"])
+class TokenObtainPairView(SimpleJWTTokenObtainPairView):
+    pass
+
+
+@extend_schema(tags=["Users"])
+class TokenRefreshView(SimpleJWTTokenRefreshView):
+    pass
+
+
+@extend_schema(tags=["Users"])
+class TokenBlacklistView(SimpleJWTTokenBlacklistView):
+    pass

@@ -26,6 +26,11 @@ class HierarchyItem(models.Model):
     """A class which can be defined as any of the HierarchyTypes."""
 
     # TODO! enforce hierarchy of HierarchyTypes -> add validation
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="hierarchy_items",
+    )
     name = models.CharField(max_length=255)
     type = models.CharField(
         max_length=20, choices=HierarchyType.choices, default=HierarchyType.SOURCE
@@ -55,6 +60,7 @@ class Deck(models.Model):
         on_delete=models.CASCADE,
         related_name="decks",
     )
+    is_public = models.BooleanField(default=False)
 
     # shared_with = models.ManyToManyField(CustomUser, related_name='shared_decks', blank=True)
 
